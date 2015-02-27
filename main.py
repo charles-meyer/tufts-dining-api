@@ -20,13 +20,17 @@ class API(webapp2.RequestHandler):
 
     def parse(self, page):
         d = {}
-        meals = page.split('shortmenumeals') #[useless, bfast, lunch, dinner]
-        d['breakfast'] = '' #(get the names dynamically)
+        meals = page.split('shortmenumeals')[1:] #[useless, bfast, lunch, dinner]
         for meal in meals:
-            categories = meal.split('shortmenucats')
+            meal_name = meal.split('</div>')[0].split('>')[1]
+            categories = meal.split('shortmenucats')[1:]
+            d[meal_name] = {}
             for category in categories:
-                items = category.split('closeDescWin()">')
-        return meals
+                cat_name = category.split('-- ')[1].split(' --')[0].title()
+                items = category.split('closeDescWin()">')[1:]
+                items = [item.split('</a')[0] for item in items]
+                d[meal_name][cat_name] = items
+        return d
 
 
 class MainHandler(webapp2.RequestHandler):
