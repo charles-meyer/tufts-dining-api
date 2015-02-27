@@ -23,6 +23,8 @@ class API(webapp2.RequestHandler):
         meals = page.split('shortmenumeals')[1:] #[useless, bfast, lunch, dinner]
         for meal in meals:
             meal_name = meal.split('</div>')[0].split('>')[1]
+            if len(meals) == 2 and meal_name == lunch:
+                meal_name = brunch
             categories = meal.split('shortmenucats')[1:]
             d[meal_name] = {}
             for category in categories:
