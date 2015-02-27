@@ -4,7 +4,6 @@ import urllib2
 import json
 
 DEWICK_URL = "http://menus.tufts.edu/foodpro/shortmenu.asp?sName=Tufts+Dining&locationNum=11&locationName=Dewick+MacPhie+Dining+Center&naFlag=1"
-DEWICK_URL = "http://menus.tufts.edu/foodpro/shortmenu.asp?sName=Tufts+Dining&locationNum=11&locationName=Dewick+MacPhie+Dining+Center&naFlag=1&WeeksMenus=This+Week%27s+Menus&myaction=read&dtdate=3%2F1%2F2015"
 CARM_URL = "http://menus.tufts.edu/foodpro/shortmenu.asp?sName=Tufts+Dining&locationNum=09&locationName=Carmichael+Dining+Center&naFlag=1"
 
 class API(webapp2.RequestHandler):
@@ -30,8 +29,8 @@ class API(webapp2.RequestHandler):
         meals = page.split('shortmenumeals')[1:] #[useless, bfast, lunch, dinner]
         for meal in meals:
             meal_name = meal.split('</div>')[0].split('>')[1]
-            if len(meals) == 2 and meal_name == lunch:
-                meal_name = brunch
+            if len(meals) == 2 and meal_name.lower() == 'lunch':
+                meal_name = 'Brunch'
             categories = meal.split('shortmenucats')[1:]
             d[meal_name] = {}
             for category in categories:
