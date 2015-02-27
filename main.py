@@ -13,10 +13,13 @@ class API(webapp2.RequestHandler):
         carm_page = urllib2.urlopen(CARM_URL).open
         d = {}
         d['food'] = 'food'
-        d['carm'] = carm_menu
-        d['dewick'] = dewick_menu
+        d['carm'] = parse(carm_page)
+        d['dewick'] = parse(dewick_page)
         str_rep = json.dumps(d, separators=(',',':'))
         self.response.write(str_rep)
+    def parse(self, page):
+        return "ayyyyyyyyy lmao"
+
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
