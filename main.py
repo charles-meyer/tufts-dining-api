@@ -13,12 +13,20 @@ class API(webapp2.RequestHandler):
         carm_page = urllib2.urlopen(CARM_URL).read()
         d = {}
         d['food'] = 'food'
-        d['carm'] = parse(carm_page)
-        d['dewick'] = parse(dewick_page)
+        d['carm'] = self.parse(carm_page)
+        d['dewick'] = self.parse(dewick_page)
         str_rep = json.dumps(d, separators=(',',':'))
         self.response.write(str_rep)
+
     def parse(self, page):
-        return "ayyyyyyyyy lmao"
+        d = {}
+        meals = page.split('shortmenumeals') #[useless, bfast, lunch, dinner]
+        d['breakfast'] = '' #(get the names dynamically)
+        for meal in meals:
+            categories = meal.split('shortmenucats')
+            for category in categories:
+                items = category.split('closeDescWin()">')
+        return meals
 
 
 class MainHandler(webapp2.RequestHandler):
