@@ -1,20 +1,27 @@
 import webapp2
+import httplib
 import urllib2
 import json
 
 DEWICK_URL = "http://menus.tufts.edu/foodpro/shortmenu.asp?sName=Tufts+Dining&locationNum=11&locationName=Dewick+MacPhie+Dining+Center&naFlag=1"
+DEWICK_URL = "http://menus.tufts.edu/foodpro/shortmenu.asp?sName=Tufts+Dining&locationNum=11&locationName=Dewick+MacPhie+Dining+Center&naFlag=1&WeeksMenus=This+Week%27s+Menus&myaction=read&dtdate=3%2F1%2F2015"
 CARM_URL = "http://menus.tufts.edu/foodpro/shortmenu.asp?sName=Tufts+Dining&locationNum=09&locationName=Carmichael+Dining+Center&naFlag=1"
 
 class API(webapp2.RequestHandler):
     def get(self):
         self.response.headers["Access-Control-Allow-Origin"] = "*"
         self.response.headers["Content-Type"] = "text/json"
-        dewick_page = urllib2.urlopen(DEWICK_URL).read()
-        carm_page = urllib2.urlopen(CARM_URL).read()
+        while True:
+            try:
+                dewick_page = urllib2.urlopen(DEWICK_URL).read()
+                carm_page = urllib2.urlopen(CARM_URL).read()
+                break
+            except httplib.HTTPException:
+                pass
         d = {}
         d['food'] = 'food'
-        d['carm'] = self.parse(carm_page)
         d['dewick'] = self.parse(dewick_page)
+        d['carm'] = self.parse(carm_page)
         str_rep = json.dumps(d, separators=(',',':'))
         self.response.write(str_rep)
 
