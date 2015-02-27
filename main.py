@@ -9,8 +9,8 @@ class API(webapp2.RequestHandler):
     def get(self):
         self.response.headers["Access-Control-Allow-Origin"] = "*"
         self.response.headers["Content-Type"] = "text/json"
-        dewick_page = urllib2.urlopen(DEWICK_URL).open
-        carm_page = urllib2.urlopen(CARM_URL).open
+        dewick_page = urllib2.urlopen(DEWICK_URL).read()
+        carm_page = urllib2.urlopen(CARM_URL).read()
         d = {}
         d['food'] = 'food'
         d['carm'] = parse(carm_page)
@@ -27,6 +27,7 @@ class MainHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     (r'/', MainHandler),
-    (r'/api', API)
+    (r'/api', API),
+    (r'/api/', API),
 ], debug=True)
 
